@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Layout: navy command rail on the left, white working canvas, teal reserved for agent activity + primary actions.
+   Tokens are RGB triplets so Tailwind can apply opacity. */
+:root {
+  --bg: 243 246 249;
+  --surface: 255 255 255;
+  --sunken: 236 241 246;
+  --line: 218 226 235;
+  --ink: 11 31 58;
+  --muted: 86 104 128;
+  --navy: 11 31 58;
+  --navy-ink: 232 239 247;
+  --navy-muted: 148 168 195;
+  --teal: 13 148 136;
+  --teal-soft: 220 244 241;
+  --teal-ink: 10 110 102;
+  --ok: 22 128 72;
+  --ok-soft: 222 244 231;
+  --warn: 176 104 0;
+  --warn-soft: 253 241 218;
+  --crit: 190 40 50;
+  --crit-soft: 252 228 230;
+  --info: 37 99 189;
+  --info-soft: 225 236 252;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: 8 18 34; --surface: 14 29 52; --sunken: 10 23 42; --line: 34 54 82;
+    --ink: 228 236 246; --muted: 146 165 190; --navy: 5 13 27; --navy-ink: 228 236 246; --navy-muted: 128 150 180;
+    --teal: 45 196 182; --teal-soft: 14 58 62; --teal-ink: 104 226 214;
+    --ok: 74 200 130; --ok-soft: 16 56 40; --warn: 240 172 70; --warn-soft: 64 46 14;
+    --crit: 248 112 120; --crit-soft: 72 22 30; --info: 112 168 250; --info-soft: 20 42 78;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: 8 18 34; --surface: 14 29 52; --sunken: 10 23 42; --line: 34 54 82;
+  --ink: 228 236 246; --muted: 146 165 190; --navy: 5 13 27; --navy-ink: 228 236 246; --navy-muted: 128 150 180;
+  --teal: 45 196 182; --teal-soft: 14 58 62; --teal-ink: 104 226 214;
+  --ok: 74 200 130; --ok-soft: 16 56 40; --warn: 240 172 70; --warn-soft: 64 46 14;
+  --crit: 248 112 120; --crit-soft: 72 22 30; --info: 112 168 250; --info-soft: 20 42 78;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  background: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+#root { height: 100%; }
+h1, h2, h3 { text-wrap: balance; }
+.tnum { font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: rgb(var(--muted)); }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field > span { font-size: 12px; font-weight: 500; color: rgb(var(--muted)); }
+.input {
+  width: 100%; border: 1px solid rgb(var(--line)); background: rgb(var(--surface)); color: rgb(var(--ink));
+  border-radius: 8px; padding: 8px 10px; font-size: 14px; line-height: 20px;
+}
+.input:focus { outline: 2px solid rgb(var(--teal) / 0.5); outline-offset: 0; border-color: rgb(var(--teal)); }
+.input[aria-invalid="true"] { border-color: rgb(var(--crit)); }
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible { outline: 2px solid rgb(var(--teal)); outline-offset: 2px; }
+.pulse-dot { animation: pulse 1.1s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .pulse-dot { animation: none; } * { transition: none !important; } }
+.scroll-x { overflow-x: auto; }
+
+/* Chat agent avatar animations */
+.avatar-mouth { transform-box: fill-box; transform-origin: center; animation: talk 0.28s ease-in-out infinite alternate; }
+@keyframes talk { from { transform: scaleY(0.35); } to { transform: scaleY(1.25); } }
+.avatar-eyes { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+.avatar-bar { height: 4px; animation: bar 0.5s ease-in-out infinite alternate; }
+@keyframes bar { from { height: 3px; } to { height: 9px; } }
+.avatar-ring { box-shadow: 0 0 0 0 rgb(var(--teal) / 0.55); animation: ring 1.2s ease-out infinite; }
+@keyframes ring { to { box-shadow: 0 0 0 12px rgb(var(--teal) / 0); } }
+@media (prefers-reduced-motion: reduce) { .avatar-mouth, .avatar-eyes, .avatar-bar, .avatar-ring { animation: none; } }

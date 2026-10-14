@@ -1,0 +1,18 @@
+import { chromium } from 'playwright';
+import path from 'node:path';
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: 'dark' });
+await p.goto('file://' + path.resolve('dist/index.html'));
+await p.getByRole('tab', { name: 'Operations Console' }).click();
+await p.locator('text=Ready-to-run scenario').click();
+await p.getByRole('button', { name: /Run agentic claims investigation/i }).click();
+await p.waitForTimeout(3200);
+await p.screenshot({ path: process.argv[2] + '/dark-running.png' });
+await p.waitForSelector('text=Consolidated investigation report', { timeout: 20000 });
+await p.locator('h2', { hasText: 'Consolidated investigation report' }).scrollIntoViewIfNeeded();
+await p.screenshot({ path: process.argv[2] + '/dark-report.png' });
+await p.setViewportSize({ width: 390, height: 844 });
+await p.locator('header').first().scrollIntoViewIfNeeded();
+await p.evaluate(() => document.getElementById('main').scrollTo(0, 0));
+await p.screenshot({ path: process.argv[2] + '/mobile-hero.png' });
+await b.close();
